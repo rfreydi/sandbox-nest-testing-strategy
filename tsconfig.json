@@ -16,6 +16,32 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
+    "noFallthroughCasesInSwitch": false,
+    "paths": {
+      "@nts/computed": [
+        "libs/computed/src"
+      ],
+      "@nts/computed/*": [
+        "libs/computed/src/*"
+      ],
+      "@nts/internal": [
+        "libs/internal/src"
+      ],
+      "@nts/internal/*": [
+        "libs/internal/src/*"
+      ],
+      "@nts/external": [
+        "libs/external/src"
+      ],
+      "@nts/external/*": [
+        "libs/external/src/*"
+      ],
+      "@nts/core": [
+        "core"
+      ],
+      "@nts/infrastructure": [
+        "infrastructure"
+      ],
+    }
   }
 }
