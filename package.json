@@ -74,20 +74,24 @@
       "^.+\\.(t|j)s$": "ts-jest"
     },
     "collectCoverageFrom": [
-      "**/*.(t|j)s"
+      "**/*.(t|j)s",
+      "!**/dist/*.ts",
+      "!**/*.module.ts"
     ],
     "coverageDirectory": "./coverage",
     "testEnvironment": "node",
     "roots": [
       "<rootDir>/apps/",
-      "<rootDir>/libs/"
+      "<rootDir>/libs/",
+      "<rootDir>/core/",
+      "<rootDir>/infrastructure/"
     ],
     "moduleNameMapper": {
       "^@nts/computed(|/.*)$": "<rootDir>/libs/computed/src/$1",
       "^@nts/internal(|/.*)$": "<rootDir>/libs/internal/src/$1",
       "^@nts/external(|/.*)$": "<rootDir>/libs/external/src/$1",
-      "^@nts/core(|/.*)$": "<rootDir>/libs/core/src/$1",
-      "^@nts/infrastructure(|/.*)$": "<rootDir>/libs/infrastructure/src/$1"
+      "^@nts/core(|/.*)$": "<rootDir>/core/$1",
+      "^@nts/infrastructure(|/.*)$": "<rootDir>/infrastructure/$1"
     }
   }
 }
