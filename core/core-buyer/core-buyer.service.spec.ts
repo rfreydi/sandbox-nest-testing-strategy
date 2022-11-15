@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { CoreBuyerService } from '@nts/core';
+import { createMock } from '@golevelup/ts-jest';
 
 describe('CoreBuyerService', () => {
   let service: CoreBuyerService;
@@ -7,7 +8,9 @@ describe('CoreBuyerService', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [CoreBuyerService],
-    }).compile();
+    })
+      .useMocker(createMock)
+      .compile();
 
     service = module.get<CoreBuyerService>(CoreBuyerService);
   });
