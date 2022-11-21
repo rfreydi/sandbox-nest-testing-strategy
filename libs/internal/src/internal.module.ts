@@ -21,25 +21,18 @@ import { MeeterFake } from '@nts/internal/dist/meeter.fake';
       name: internalToken,
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
-        ...(process.env.NODE_ENV === 'test'
-          ? {
-              type: 'better-sqlite3',
-              database: ':memory:',
-              dropSchema: true,
-            }
-          : {
-              type: configService.get('TYPE'),
-              host: configService.get('HOST'),
-              port: +configService.get('PORT'),
-              username: configService.get('USERNAME'),
-              password: configService.get('PASSWORD'),
-              database: configService.get('DATABASE'),
-              ...(!!configService.get('CLUSTER') && {
-                extra: {
-                  options: `--cluster=${configService.get('CLUSTER')}`,
-                },
-              }),
-            }),
+        type: configService.get('TYPE'),
+        host: configService.get('HOST'),
+        port: +configService.get('PORT'),
+        username: configService.get('USERNAME'),
+        password: configService.get('PASSWORD'),
+        database: configService.get('DATABASE'),
+        dropSchema: process.env.NODE_ENV === 'test',
+        ...(!!configService.get('CLUSTER') && {
+          extra: {
+            options: `--cluster=${configService.get('CLUSTER')}`,
+          },
+        }),
         entities: [Meet],
         /* ssl: { rejectUnauthorized: false }, // For insecure connections only */
         ssl: true,

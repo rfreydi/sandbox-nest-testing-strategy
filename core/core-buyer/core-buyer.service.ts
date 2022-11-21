@@ -18,6 +18,10 @@ export class CoreBuyerService {
     return this.repository.update(email, data);
   }
 
+  getAll(): Promise<CoreBuyer[]> {
+    return this.repository.getAll();
+  }
+
   getByEmail(email: string): Promise<CoreBuyer> {
     return this.repository.getByEmail(email);
   }

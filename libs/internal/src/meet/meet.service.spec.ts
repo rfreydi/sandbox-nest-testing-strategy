@@ -32,10 +32,6 @@ describe('MeetService', () => {
     jest.clearAllMocks();
   });
 
-  it('should be defined', () => {
-    expect(service).toBeDefined();
-  });
-
   describe('takeFor', () => {
     it('WHEN Meeter and Repository succeed -> THEN saved data should be returned', async () => {
       // Arrange
@@ -61,8 +57,11 @@ describe('MeetService', () => {
       const date = new Date('2022-10-20');
       meeter.meet.mockRejectedValue('meet failed');
 
+      // Act
+      const call = () => service.takeFor(email, date);
+
       // Assert
-      await expect(service.takeFor(email, date)).rejects.toThrowError();
+      await expect(call).rejects.toThrowError();
     });
 
     it('WHEN Repository fail -> THEN Error should be throw', async () => {

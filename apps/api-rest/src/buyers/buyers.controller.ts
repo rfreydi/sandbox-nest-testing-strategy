@@ -1,12 +1,4 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Param } from '@nestjs/common';
 import { BuyersService } from './buyers.service';
 import { BuyerAttribute } from './entities/buyer.attribute';
 import { Buyer } from './entities/buyer.entity';
@@ -30,21 +22,8 @@ export class BuyersController {
     return this.buyersService.findOne(email);
   }
 
-  @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updateBuyerDto: Partial<Omit<BuyerAttribute, 'password'>>,
-  ) {
-    return this.buyersService.update(+id, updateBuyerDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.buyersService.remove(+id);
-  }
-
   @Post(':email/meet')
-  createMeet(@Param('email') email: string, @Body('date') iso: string) {
+  createMeet(@Param('email') email: string, @Body('iso') iso: string) {
     return this.buyersService.createMeet(email, new Date(iso));
   }
 }

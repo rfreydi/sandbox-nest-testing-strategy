@@ -20,7 +20,7 @@ describe('Infrastructure', () => {
           },
         ]),
       ] as SqlUserAdapterFromCore[])(
-        'should properly map data $input to $output',
+        'WHEN transforming core $input -> THEN sql entity should be $output',
         ({ input, output }: SqlUserAdapterFromCore) => {
           // Act
           const entity = SqlUserAdapter.fromCore(input);

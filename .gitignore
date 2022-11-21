@@ -16,6 +16,7 @@ lerna-debug.log*
 
 # Tests
 /coverage
+/coverage-full
 /.nyc_output
 
 # IDEs and editors
@@ -36,4 +37,7 @@ lerna-debug.log*
 
 # ENV
 
-.env
+.env.development.local
+.env.development
+.env.production
+.env.test

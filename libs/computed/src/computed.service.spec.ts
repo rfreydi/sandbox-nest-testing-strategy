@@ -8,7 +8,7 @@ describe('ComputedService', () => {
   });
 
   describe('getFinancialModel', () => {
-    it('WHEN calculating a financial model -> THEN should return proper value', () => {
+    it('WHEN calculating a financial model -> THEN proper value returned', () => {
       // Arrange
       const dto = {
         annualRent: 16500,

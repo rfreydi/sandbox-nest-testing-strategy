@@ -27,10 +27,6 @@ describe('TrackService', () => {
     jest.clearAllMocks();
   });
 
-  it('should be defined', () => {
-    expect(service).toBeDefined();
-  });
-
   describe('track', () => {
     it('WHEN Tracker fail -> THEN it should log and return nothing', async () => {
       // Arrange

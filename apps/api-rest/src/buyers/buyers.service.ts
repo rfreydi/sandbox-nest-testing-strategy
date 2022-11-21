@@ -18,23 +18,12 @@ export class BuyersService {
   }
 
   findAll() {
-    return `This action returns all buyers`;
+    return this.coreBuyerService.getAll();
   }
 
   findOne(email: string) {
     this.trackService.track({ type: 'findOne', email });
     return this.coreBuyerService.getByEmail(email);
-  }
-
-  update(
-    id: number,
-    updateBuyerDto: Partial<Omit<BuyerAttribute, 'password'>>,
-  ) {
-    return `This action updates a #${id} buyer`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} buyer`;
   }
 
   createMeet(email: string, date: Date) {

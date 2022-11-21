@@ -15,6 +15,10 @@ describe('BuyersService', () => {
     service = module.get<BuyersService>(BuyersService);
   });
 
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
