@@ -1,18 +1,34 @@
-import { Test, TestingModule } from '@nestjs/testing';
 import { SqlUserAdapter } from './sql-user.adapter';
 
-describe('SqlUserAdapter', () => {
-  let service: SqlUserAdapter;
+interface SqlUserAdapterFromCore {
+  input: Parameters<typeof SqlUserAdapter.fromCore>[0];
+  output: ReturnType<typeof SqlUserAdapter.fromCore>;
+}
 
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [SqlUserAdapter],
-    }).compile();
+describe('Infrastructure', () => {
+  describe('Sql', () => {
+    describe('SqlUserAdapter', () => {
+      it.each([
+        { input: {}, output: {} },
+        ...[undefined, null, '', 'test'].flatMap((value) => [
+          { input: { email: value }, output: {} },
+          { input: { firstName: value }, output: { firstName: value } },
+          { input: { lastName: value }, output: { lastName: value } },
+          {
+            input: { firstName: value, lastName: value },
+            output: { firstName: value, lastName: value },
+          },
+        ]),
+      ] as SqlUserAdapterFromCore[])(
+        'WHEN transforming core $input -> THEN sql entity should be $output',
+        ({ input, output }: SqlUserAdapterFromCore) => {
+          // Act
+          const entity = SqlUserAdapter.fromCore(input);
 
-    service = module.get<SqlUserAdapter>(SqlUserAdapter);
-  });
-
-  it('should be defined', () => {
-    expect(service).toBeDefined();
+          // Assert
+          expect(entity).toEqual(output);
+        },
+      );
+    });
   });
 });

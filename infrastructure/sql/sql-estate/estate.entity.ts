@@ -15,6 +15,8 @@ export class Estate {
   @Column()
   rent: number;
 
-  @ManyToOne(() => Buyer, (buyer) => buyer.estates)
+  @ManyToOne(() => Buyer, (buyer) => buyer.estates, {
+    cascade: true,
+  })
   buyer: Buyer;
 }

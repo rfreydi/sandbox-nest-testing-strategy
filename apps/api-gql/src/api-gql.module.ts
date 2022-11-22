@@ -8,6 +8,7 @@ import { CoreBuyerModule, CoreEstateModule, CoreUserModule } from '@nts/core';
 import { ComputedModule } from '@nts/computed';
 import { EstateResolver } from './estate/estate.resolver';
 import { ConfigModule } from '@nestjs/config';
+import { envFilePath } from '../../../core/env-file-path';
 
 @Module({
   imports: [
@@ -16,7 +17,7 @@ import { ConfigModule } from '@nestjs/config';
       autoSchemaFile: true,
     }),
     ComputedModule,
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({ envFilePath }),
     CoreBuyerModule,
     CoreEstateModule,
     CoreUserModule,

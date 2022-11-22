@@ -24,14 +24,15 @@ const adapters = [SqlBuyerAdapter, SqlEstateAdapter, SqlUserAdapter];
         username: configService.get('USERNAME'),
         password: configService.get('PASSWORD'),
         database: configService.get('DATABASE'),
+        dropSchema: process.env.NODE_ENV === 'test',
         ...(!!configService.get('CLUSTER') && {
           extra: {
             options: `--cluster=${configService.get('CLUSTER')}`,
           },
         }),
         entities: [Buyer, Estate, User],
-        ssl: { rejectUnauthorized: false }, // For insecure connections only */
-        // ssl: true,
+        /* ssl: { rejectUnauthorized: false }, // For insecure connections only */
+        ssl: true,
         synchronize: true,
       }),
       inject: [ConfigService],

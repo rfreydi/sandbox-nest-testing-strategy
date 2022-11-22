@@ -46,6 +46,12 @@ export class SqlBuyerAdapter implements CoreBuyerRepository {
     return this.buyerRepository.save(buyer).then(SqlBuyerAdapter.toCore);
   }
 
+  getAll(): Promise<CoreBuyer[]> {
+    return this.queryBuilder
+      .getMany()
+      .then((buyers) => buyers.map(SqlBuyerAdapter.toCore));
+  }
+
   getByEmail(email: string): Promise<CoreBuyer> {
     return this.queryBuilder
       .where('user.email = :email', { email })

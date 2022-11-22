@@ -1,18 +1,41 @@
-import { Test, TestingModule } from '@nestjs/testing';
 import { ComputedService } from './computed.service';
 
 describe('ComputedService', () => {
   let service: ComputedService;
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [ComputedService],
-    }).compile();
-
-    service = module.get<ComputedService>(ComputedService);
+    service = new ComputedService();
   });
 
-  it('should be defined', () => {
-    expect(service).toBeDefined();
+  describe('getFinancialModel', () => {
+    it('WHEN calculating a financial model -> THEN proper value returned', () => {
+      // Arrange
+      const dto = {
+        annualRent: 16500,
+        netSeller: 250_000,
+      };
+
+      // Act
+      const financialModel = service.getFinancialModel(dto);
+
+      // Assert
+      expect(financialModel).toEqual({
+        grossReturn: 0.066,
+      });
+    });
+
+    it('WHEN calculating a financial model AND netSeller is 0 -> THEN should throw error', () => {
+      // Arrange
+      const dto = {
+        annualRent: 16500,
+        netSeller: 0,
+      };
+
+      // Act
+      const call = () => service.getFinancialModel(dto);
+
+      // Assert
+      expect(call).toThrowError();
+    });
   });
 });

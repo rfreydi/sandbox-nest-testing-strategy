@@ -7,19 +7,24 @@ import { internalToken } from '@nts/internal/internal.token';
 
 @Injectable()
 export class MeetService {
-  private meeter = new Meeter();
-
   constructor(
+    private meeter: Meeter,
     @InjectRepository(Meet, internalToken)
     private meetRepository: Repository<Meet>,
   ) {}
 
   takeFor(email: string, date: Date): Promise<Meet | void> {
-    return this.meeter.meet(email, date).then(({ id }) => {
-      const meet = new Meet();
-      meet.email = email;
-      meet.meeterId = id;
-      return this.meetRepository.save(meet);
-    });
+    return this.meeter
+      .meet(email, date)
+      .then(({ id }) => {
+        const meet = new Meet();
+        meet.email = email;
+        meet.meeterId = id;
+        return this.meetRepository.save(meet);
+      })
+      .catch((err) => {
+        // log err
+        throw new Error(`Unable to take for ${email}.`);
+      });
   }
 }
