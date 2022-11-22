@@ -76,7 +76,11 @@ Naming: `*.integration.ts`
 
 Test that verify resolver/controller calls and response.
 
-We can mock only external dependency (side effect) and nothing else
+`Integration` tests must not mock implementation as they'll have proper environment variables or `Fakes`.
+A `Fake` is a code that mimic driver/sdk that you rely on programmatically.
+It enables NestJS to inject the `Fake` instead of the real driver during testing and therefore automatically mock external dependencies (side effects) only.
+
+_You can still verify that a side effect as been properly performed if it's part of the defined business behavior, but don't just verify that a method as been called, you'll perform implementation testing and not behavior testing._
 
 ### Unit
 
@@ -84,7 +88,7 @@ Naming: `*.spec.ts`
 
 Test that mock every side effect of the function and focus only on the logic of the function itself
 
-Ex: a function that have 3 "get" calls and do an addition, then the 3 "get" must be mocked and only the addition will be covered.
+_Ex: a function that have 3 "get" calls and do an addition, then the 3 "get" must be mocked and only the addition will be covered._
 
 ## Priorities
 
@@ -100,6 +104,23 @@ Therefore, they're optional but still relevant for:
 - edge-case like throw, "impossible" case that should not happen, ...
 - heavy calculation performed
 - almost all utils that have mostly no dependencies
+
+## How-to
+
+Here are files that you can look if you want to have some example for particular use-case.
+
+### Integration
+
+- `*.resolver.ts`: [buyers.integration.ts (gql)](/apps/api-gql/test/buyers.integration.ts)
+- `*.controller.ts`: [buyers.integration.ts (rest)](/apps/api-rest/test/buyers.integration.ts)
+
+### Unit
+
+- `*.service.ts` that have `0` dependency: [computed.service.spec.ts](/libs/computed/src/computed.service.spec.ts)
+- `*.service.ts` that have `1..*` dependencies: [track.service.spec.ts](/libs/external/src/track/track.service.spec.ts)
+- `*.service.ts` that rely on `@InjectRepository` or `@InjectModel`: [meet.service.spec.ts](/libs/internal/src/meet/meet.service.spec.ts)
+- `*.(service|adapter).ts` that rely on an external `sdk` or `driver`: [track.service.spec.ts](/libs/external/src/track/track.service.spec.ts) + [external.module.ts](/libs/external/src/external.module.ts) + [tracker.fake.ts](/libs/external/src/dist/tracker.fake.ts)
+- `*.adapter.ts` that do mapping: [sql-user.adapter.spec.ts](/infrastructure/sql/sql-user/sql-user.adapter.spec.ts)
 
 ## FAQ
 
