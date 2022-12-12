@@ -28,7 +28,10 @@ describe('TrackService', () => {
   });
 
   describe('track', () => {
-    it('WHEN Tracker fail -> THEN it should log and return nothing', async () => {
+    it(`
+    WHEN Tracker fail
+    THEN it should log and return nothing
+    `, async () => {
       // Arrange
       const data: Parameters<TrackService['track']>[0] = {
         test: 'test',

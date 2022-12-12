@@ -4,6 +4,7 @@ import { createMock, DeepMocked } from '@golevelup/ts-jest';
 import { Repository } from 'typeorm';
 import { Meeter } from '@nts/internal/dist/meeter';
 import { internalToken } from '@nts/internal/internal.token';
+import { getRepositoryToken } from '@nestjs/typeorm';
 
 describe('MeetService', () => {
   let service: MeetService;
@@ -15,7 +16,7 @@ describe('MeetService', () => {
       providers: [
         MeetService,
         {
-          provide: internalToken + '_MeetRepository',
+          provide: getRepositoryToken(Meet, internalToken),
           useValue: createMock(),
         },
       ],
@@ -25,7 +26,7 @@ describe('MeetService', () => {
 
     service = module.get(MeetService);
     meeter = module.get(Meeter);
-    meetRepository = module.get(internalToken + '_MeetRepository');
+    meetRepository = module.get(getRepositoryToken(Meet, internalToken));
   });
 
   afterEach(() => {
@@ -33,7 +34,10 @@ describe('MeetService', () => {
   });
 
   describe('takeFor', () => {
-    it('WHEN Meeter and Repository succeed -> THEN saved data should be returned', async () => {
+    it(`
+    WHEN Meeter and Repository succeed
+    THEN saved data should be returned
+    `, async () => {
       // Arrange
       const email = 'romain.freydiger@masteos.com';
       const date = new Date('2022-10-20');
@@ -51,7 +55,10 @@ describe('MeetService', () => {
       });
     });
 
-    it('WHEN Meeter fail -> THEN Error should be throw', async () => {
+    it(`
+    WHEN Meeter fail
+    THEN Error should be throw
+    `, async () => {
       // Arrange
       const email = 'romain.freydiger@masteos.com';
       const date = new Date('2022-10-20');
@@ -64,7 +71,10 @@ describe('MeetService', () => {
       await expect(call).rejects.toThrowError();
     });
 
-    it('WHEN Repository fail -> THEN Error should be throw', async () => {
+    it(`
+    WHEN Repository fail
+    THEN Error should be throw
+    `, async () => {
       // Arrange
       const email = 'romain.freydiger@masteos.com';
       const date = new Date('2022-10-20');

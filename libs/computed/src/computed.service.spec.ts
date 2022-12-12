@@ -8,7 +8,10 @@ describe('ComputedService', () => {
   });
 
   describe('getFinancialModel', () => {
-    it('WHEN calculating a financial model -> THEN proper value returned', () => {
+    it(`
+    WHEN calculating a financial model
+    THEN proper value returned
+    `, () => {
       // Arrange
       const dto = {
         annualRent: 16500,
@@ -24,7 +27,10 @@ describe('ComputedService', () => {
       });
     });
 
-    it('WHEN calculating a financial model AND netSeller is 0 -> THEN should throw error', () => {
+    it(`
+    WHEN calculating a financial model AND netSeller is 0
+    THEN should throw error
+    `, () => {
       // Arrange
       const dto = {
         annualRent: 16500,

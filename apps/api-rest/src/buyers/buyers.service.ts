@@ -12,9 +12,10 @@ export class BuyersService {
     private trackService: TrackService,
   ) {}
 
-  create(createBuyerDto: BuyerAttribute) {
+  async create(createBuyerDto: BuyerAttribute) {
+    const buyer = await this.coreBuyerService.create(createBuyerDto);
     this.trackService.track({ type: 'create', email: createBuyerDto.email });
-    return this.coreBuyerService.create(createBuyerDto);
+    return buyer;
   }
 
   findAll() {
