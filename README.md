@@ -140,6 +140,77 @@ If you want to propose a new way to handle some testing cases, you can create a 
 - If you ever thought on a concrete solution, show it and explain which area should be changed to implement it.
 - Present it to testing strategy stakeholders and potentially others developers/managers.
 
+### What is the syntax to follow ?
+
+If you have a **single** instruction **without** parameter:
+
+```typescript
+describe('GIVEN ...', async () => {
+
+  it('WHEN ...', async () => {
+    // ...stuff
+  });
+  
+});
+
+```
+
+If you have a **single** instruction **with** parameter that force wrap:
+
+```typescript
+describe(
+  'GIVEN ...',
+  async ({ /* lot of parameters that force wrap */ }) => {
+  
+    it(
+      'THEN ...',
+      async ({ /* lot of parameters that force wrap */ }) => {
+        // stuff
+      }
+    );
+
+  }
+);
+```
+
+If you have **multiple** instruction **without** parameter:
+
+```typescript
+describe(`
+GIVEN ...
+AND ...
+`, async () => {
+  
+  it(`
+  WHEN ...
+  THEN ...
+  `, async () => {
+    // ...stuff
+  });
+  
+});
+```
+
+If you have **multiple** instruction **with** parameter that force wrap:
+
+```typescript
+describe(
+  `GIVEN ...
+  AND ...`,
+  async ({ /* lot of parameters that force wrap */ }) => {
+    
+    it(
+      `WHEN ...
+      THEN ...`,
+      async ({ /* lot of parameters that force wrap */ }) => {
+        // stuff
+      }
+    );
+    
+  }
+);
+```
+
 ## Specifications
 
 ### Api - GQL
