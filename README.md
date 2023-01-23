@@ -147,7 +147,7 @@ If you have a **single** instruction **without** parameter:
 ```typescript
 describe('GIVEN ...', async () => {
 
-  it('WHEN ...', async () => {
+  it('THEN ...', async () => {
     // ...stuff
   });
   
@@ -209,6 +209,23 @@ describe(
     
   }
 );
+```
+
+#### Triple A pattern
+
+For each case, you must follow the Arrange/Act/Assert pattern (keep commentary in file):
+
+```typescript
+it('THEN ...', async () => {
+  // Arrange
+  const param = ...;
+
+  // Act
+  const res = ...;
+
+  // Assert
+  expect(...);
+});
 ```
 
 ## Specifications
