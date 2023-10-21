@@ -1,16 +1,18 @@
-export * from './core-buyer/core-buyer.module';
-export * from './core-buyer/core-buyer.service';
-export * from './core-buyer/core-buyer';
-export * from './core-buyer/core-buyer-attributes';
-export * from './core-buyer/core-buyer.repository';
+export * from './core.module';
 
-export * from './core-estate/core-estate.module';
-export * from './core-estate/core-estate.service';
-export * from './core-estate/core-estate';
-export * from './core-estate/core-estate.repository';
+export * from './entities/core-buyer/core-buyer';
+export * from './entities/core-buyer/core-buyer-attributes';
+export * from './entities/core-buyer/core-buyer.repository-port';
 
-export * from './core-user/core-user.module';
-export * from './core-user/core-user.service';
-export * from './core-user/core-user';
-export * from './core-user/core-user-attributes';
-export * from './core-user/core-user.repository';
+export * from './entities/core-estate/core-estate';
+export * from './entities/core-estate/core-estate.repository-port';
+
+export * from './entities/core-user/core-user';
+export * from './entities/core-user/core-user-attributes';
+export * from './entities/core-user/core-user.repository-port';
+
+export * from './shared/meet';
+
+export * from './use-cases/account.use-case';
+export * from './use-cases/consulting.use-case';
+export * from './use-cases/research.use-case';

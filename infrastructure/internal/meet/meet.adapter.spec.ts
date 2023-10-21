@@ -1,20 +1,22 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { Meet, MeetService } from '@nts/internal';
 import { createMock, DeepMocked } from '@golevelup/ts-jest';
 import { Repository } from 'typeorm';
-import { Meeter } from '@nts/internal/dist/meeter';
-import { internalToken } from '@nts/internal/internal.token';
+import { Meeter } from '../dist/meeter';
+import { MeetAdapter } from './meet.adapter';
+import { Meet } from './meet.entity';
+import { internalToken } from '../internal.token';
 import { getRepositoryToken } from '@nestjs/typeorm';
+import { CoreBuyer } from '@nts/core';
 
-describe('MeetService', () => {
-  let service: MeetService;
+describe('MeetAdapter', () => {
+  let service: MeetAdapter;
   let meeter: DeepMocked<Meeter>;
   let meetRepository: DeepMocked<Repository<Meet>>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        MeetService,
+        MeetAdapter,
         {
           provide: getRepositoryToken(Meet, internalToken),
           useValue: createMock(),
@@ -24,7 +26,7 @@ describe('MeetService', () => {
       .useMocker(createMock)
       .compile();
 
-    service = module.get(MeetService);
+    service = module.get(MeetAdapter);
     meeter = module.get(Meeter);
     meetRepository = module.get(getRepositoryToken(Meet, internalToken));
   });
@@ -33,24 +35,25 @@ describe('MeetService', () => {
     jest.clearAllMocks();
   });
 
-  describe('takeFor', () => {
+  describe('createMeet', () => {
     it(`
     WHEN Meeter and Repository succeed
     THEN saved data should be returned
     `, async () => {
       // Arrange
-      const email = 'romain.freydiger@masteos.com';
+      const buyer = new CoreBuyer();
+      buyer.email = 'romain.freydiger@outlook.fr';
       const date = new Date('2022-10-20');
       const id = '1';
       meeter.meet.mockResolvedValue({ id, date });
       meetRepository.save.mockImplementation((v: Meet) => Promise.resolve(v));
 
       // Act
-      const meet = await service.takeFor(email, date);
+      const meet = await service.createMeet(buyer, date);
 
       // Assert
       expect(meet).toEqual({
-        email,
+        email: buyer.email,
         meeterId: id,
       });
     });
@@ -60,12 +63,13 @@ describe('MeetService', () => {
     THEN Error should be throw
     `, async () => {
       // Arrange
-      const email = 'romain.freydiger@masteos.com';
+      const buyer = new CoreBuyer();
+      buyer.email = 'romain.freydiger@outlook.fr';
       const date = new Date('2022-10-20');
       meeter.meet.mockRejectedValue('meet failed');
 
       // Act
-      const call = () => service.takeFor(email, date);
+      const call = () => service.createMeet(buyer, date);
 
       // Assert
       await expect(call).rejects.toThrowError();
@@ -76,14 +80,15 @@ describe('MeetService', () => {
     THEN Error should be throw
     `, async () => {
       // Arrange
-      const email = 'romain.freydiger@masteos.com';
+      const buyer = new CoreBuyer();
+      buyer.email = 'romain.freydiger@outlook.fr';
       const date = new Date('2022-10-20');
       const id = '1';
       meeter.meet.mockResolvedValue({ id, date });
       meetRepository.save.mockRejectedValue('save failed');
 
       // Act
-      const call = () => service.takeFor(email, date);
+      const call = () => service.createMeet(buyer, date);
 
       // Assert
       await expect(call).rejects.toThrowError();

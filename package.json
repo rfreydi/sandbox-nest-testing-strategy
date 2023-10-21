@@ -91,7 +91,6 @@
     ],
     "moduleNameMapper": {
       "^@nts/computed(|/.*)$": "<rootDir>/libs/computed/src/$1",
-      "^@nts/internal(|/.*)$": "<rootDir>/libs/internal/src/$1",
       "^@nts/external(|/.*)$": "<rootDir>/libs/external/src/$1",
       "^@nts/core(|/.*)$": "<rootDir>/core/$1",
       "^@nts/infrastructure(|/.*)$": "<rootDir>/infrastructure/$1"

@@ -2,7 +2,7 @@
 
 ## Description
 
-This repository is created to provide an environment that show up common testing technique at Masteos without being alternate frequently.
+This repository is created to provide an environment that show up common testing technique without being alternate frequently.
 
 ## Installation
 
@@ -118,9 +118,9 @@ Here are files that you can look if you want to have some example for particular
 
 - `*.service.ts` that have `0` dependency: [computed.service.spec.ts](/libs/computed/src/computed.service.spec.ts)
 - `*.service.ts` that have `1..*` dependencies: [track.service.spec.ts](/libs/external/src/track/track.service.spec.ts)
-- `*.service.ts` that rely on `@InjectRepository` or `@InjectModel`: [meet.service.spec.ts](/libs/internal/src/meet/meet.service.spec.ts)
+- `*.service.ts` that rely on `@InjectRepository` or `@InjectModel`: [meet.adapter.spec.ts](/infrastructure/internal/meet/meet.adapter.spec.ts)
 - `*.(service|adapter).ts` that rely on an external `sdk` or `driver`: [track.service.spec.ts](/libs/external/src/track/track.service.spec.ts) + [external.module.ts](/libs/external/src/external.module.ts) + [tracker.fake.ts](/libs/external/src/dist/tracker.fake.ts)
-- `*.adapter.ts` that do mapping: [sql-user.adapter.spec.ts](/infrastructure/sql/sql-user/sql-user.adapter.spec.ts)
+- `*.adapter.ts` that do mapping: [sql-user.mapper.spec.ts](/infrastructure/sql/sql-user/sql-user.mapper.spec.ts)
 
 ## FAQ
 
@@ -139,6 +139,11 @@ If you want to propose a new way to handle some testing cases, you can create a 
 - Explain explicitly what your pain point (or blockage) were.
 - If you ever thought on a concrete solution, show it and explain which area should be changed to implement it.
 - Present it to testing strategy stakeholders and potentially others developers/managers.
+
+### What the difference between a module in the `libs` folder and ones in the `infrastructure` ?
+
+- A module in the `libs` folder can be used in apps and in adapters.
+- A module in the `infrastructure` folder can **only** be used in adapters. If you need it in an app it must be call thought `use-case -> port -> adapater`.
 
 ### What is the syntax to follow ?
 
@@ -239,7 +244,7 @@ it('THEN ...', async () => {
 Some examples:
 ```graphql
 query me {
-  me(email: "romain.freydiger@masteos.com") {
+  me(email: "romain.freydiger@outlook.fr") {
     id
     email
     firstName
@@ -258,7 +263,7 @@ query me {
 
 mutation updateBuyer {
     updateBuyer(
-        email: "romain.freydiger@masteos.com"
+        email: "romain.freydiger@outlook.fr"
         updateBuyerData: { budgetMin: 15 ,firstName: "test" }
     ) {
         firstName
@@ -280,7 +285,7 @@ POST http://localhost:3000/buyers
 Content-Type: application/json
 
 {
-  "email": "romain.freydiger@masteos.com",
+  "email": "romain.freydiger@outlook.fr",
   "password": "test",
   "firstName": "romain",
   "lastName": "freydiger",
@@ -289,11 +294,11 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:3000/buyers/romain.freydiger@masteos.com
+GET http://localhost:3000/buyers/romain.freydiger@outlook.fr
 Accept: application/json
 
 ### create a meet partly in 3rd party and partly in our database
-POST http://localhost:3000/buyers/romain.freydiger@masteos.com/meet
+POST http://localhost:3000/buyers/romain.freydiger@outlook.fr/meet
 Content-Type: application/json
 
 {
@@ -301,7 +306,7 @@ Content-Type: application/json
 }
 
 ### should throw an error if previous post is done
-POST http://localhost:3000/buyers/romain.freydiger@masteos.com/meet
+POST http://localhost:3000/buyers/romain.freydiger@outlook.fr/meet
 Content-Type: application/json
 
 {
@@ -317,6 +322,6 @@ Content-Type: application/json
 
 - I can track some data, but not more than 5 times
 
-### Lib - Internal (interact with data source that we don't own **and** one that we own)
+### Infrastructure - Internal (interact with data source that we don't own **and** one that we own)
 
 - I can take some meet, but not if one is already planned for later (on the same buyer)

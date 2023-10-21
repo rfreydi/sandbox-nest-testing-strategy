@@ -1,29 +1,37 @@
 import { Controller, Get, Post, Body, Param } from '@nestjs/common';
-import { BuyersService } from './buyers.service';
 import { BuyerAttribute } from './entities/buyer.attribute';
 import { Buyer } from './entities/buyer.entity';
+import { AccountUseCase, ConsultingUseCase } from '@nts/core';
+import { TrackService } from '@nts/external';
 
 @Controller('buyers')
 export class BuyersController {
-  constructor(private readonly buyersService: BuyersService) {}
+  constructor(
+    private accountUseCase: AccountUseCase,
+    private consultingUseCase: ConsultingUseCase,
+    private trackService: TrackService,
+  ) {}
 
   @Post()
-  create(@Body() createBuyerDto: BuyerAttribute) {
-    return this.buyersService.create(createBuyerDto);
+  async create(@Body() createBuyerDto: BuyerAttribute) {
+    const buyer = await this.accountUseCase.create(createBuyerDto);
+    this.trackService.track({ type: 'create', email: createBuyerDto.email });
+    return buyer;
   }
 
   @Get()
   findAll() {
-    return this.buyersService.findAll();
+    return this.accountUseCase.getAll();
   }
 
   @Get(':email')
   findOne(@Param('email') email: string): Promise<Omit<Buyer, 'password'>> {
-    return this.buyersService.findOne(email);
+    this.trackService.track({ type: 'findOne', email });
+    return this.accountUseCase.getByEmail(email);
   }
 
   @Post(':email/meet')
   createMeet(@Param('email') email: string, @Body('iso') iso: string) {
-    return this.buyersService.createMeet(email, new Date(iso));
+    return this.consultingUseCase.createMeet(email, iso);
   }
 }

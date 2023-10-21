@@ -1,4 +1,5 @@
 import { IsNotEmpty, IsNumber, IsString, Matches } from 'class-validator';
+import { CoreEstateFinancialModel } from './core-estate-financial-model';
 
 export class CoreEstate {
   @IsString()
@@ -17,4 +18,6 @@ export class CoreEstate {
   @IsNotEmpty()
   @Matches(/^(available|coveted|sold)$/)
   status: 'available' | 'coveted' | 'sold';
+
+  financialModel: CoreEstateFinancialModel;
 }

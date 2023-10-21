@@ -8,20 +8,20 @@ import {
 } from '@nestjs/graphql';
 import { UpdateBuyerInput } from './inputs/update-buyer.input';
 import { Buyer } from './models/buyer.model';
-import { BuyerService } from './buyer.service';
 import { Estate } from '../estate/models/estate.model';
-import { EstateService } from '../estate/estate.service';
+import { AccountUseCase, ResearchUseCase } from '@nts/core';
 
 @Resolver(() => Buyer)
 export class BuyerResolver {
   constructor(
-    private buyerService: BuyerService,
-    private estateService: EstateService,
+    private accountUseCase: AccountUseCase,
+    private researchUseCase: ResearchUseCase,
   ) {}
 
   @Query(() => Buyer)
-  me(@Args('email') email: string) {
-    return this.buyerService.getByEmail(email);
+  async me(@Args('email') email: string) {
+    const coreBuyer = await this.accountUseCase.getByEmail(email);
+    return Buyer.fromCore(coreBuyer);
   }
 
   @Mutation(() => Buyer)
@@ -29,11 +29,11 @@ export class BuyerResolver {
     @Args('email') email: string,
     @Args('updateBuyerData') updateBuyerData: UpdateBuyerInput,
   ) {
-    return this.buyerService.update(email, updateBuyerData);
+    return this.accountUseCase.update(email, updateBuyerData);
   }
 
   @ResolveField(() => [Estate])
   estates(@Parent() parent: Buyer) {
-    return this.estateService.getList(parent.id);
+    return this.researchUseCase.getList(parent.id);
   }
 }

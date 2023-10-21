@@ -24,12 +24,6 @@
       "@nts/computed/*": [
         "libs/computed/src/*"
       ],
-      "@nts/internal": [
-        "libs/internal/src"
-      ],
-      "@nts/internal/*": [
-        "libs/internal/src/*"
-      ],
       "@nts/external": [
         "libs/external/src"
       ],

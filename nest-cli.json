@@ -36,15 +36,6 @@
         "tsConfigPath": "libs/computed/tsconfig.lib.json"
       }
     },
-    "internal": {
-      "type": "library",
-      "root": "libs/internal",
-      "entryFile": "index",
-      "sourceRoot": "libs/internal/src",
-      "compilerOptions": {
-        "tsConfigPath": "libs/internal/tsconfig.lib.json"
-      }
-    },
     "external": {
       "type": "library",
       "root": "libs/external",

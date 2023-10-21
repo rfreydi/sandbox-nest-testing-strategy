@@ -1,18 +1,21 @@
 import { Injectable } from '@nestjs/common';
-import { CoreEstate, CoreEstateRepository } from '@nts/core';
+import { CoreEstate, CoreEstateRepositoryPort } from '@nts/core';
 import { Repository, SelectQueryBuilder } from 'typeorm';
 import { Estate } from './estate.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { toCoreId, toSqlId } from '../helpers/id.transform';
+import { toSqlId } from '../helpers/id.transform';
+import { ComputedService } from '@nts/computed';
+import { SqlEstateMapper } from './sql-estate.mapper';
 
 @Injectable()
-export class SqlEstateAdapter implements CoreEstateRepository {
+export class SqlEstateRepositoryAdapter implements CoreEstateRepositoryPort {
   private get queryBuilder(): SelectQueryBuilder<Estate> {
     return this.estateRepository.createQueryBuilder('estate');
   }
   constructor(
     @InjectRepository(Estate)
     private estateRepository: Repository<Estate>,
+    private computedService: ComputedService,
   ) {}
 
   getListForBuyer(coreId: string): Promise<CoreEstate[]> {
@@ -22,14 +25,16 @@ export class SqlEstateAdapter implements CoreEstateRepository {
       .innerJoin('estateBuyer.user', 'buyerUser')
       .where('buyerUser.id = :id', { id: toSqlId(coreId) })
       .getMany()
-      .then((estateList) => estateList.map(SqlEstateAdapter.toCore));
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  static toCore({ buyer, id, ...estate }: Estate): CoreEstate {
-    return {
-      id: toCoreId(id),
-      ...estate,
-    };
+      .then((estateList) =>
+        estateList.map((estate) =>
+          SqlEstateMapper.toCore(
+            estate,
+            this.computedService.getFinancialModel({
+              annualRent: estate.rent,
+              netSeller: estate.netSeller,
+            }),
+          ),
+        ),
+      );
   }
 }

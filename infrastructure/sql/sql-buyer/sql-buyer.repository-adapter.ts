@@ -5,16 +5,15 @@ import { Buyer } from './buyer.entity';
 import {
   CoreBuyer,
   CoreBuyerAttributes,
-  CoreBuyerRepository,
+  CoreBuyerRepositoryPort,
   CoreUser,
 } from '@nts/core';
 import { User } from '../sql-user/user.entity';
-import { toCoreId } from '../helpers/id.transform';
-import { BuyerAttributes } from './buyer.attributes';
-import { SqlUserAdapter } from '../sql-user/sql-user.adapter';
+import { SqlBuyerMapper } from './sql-buyer.mapper';
+import { SqlUserMapper } from '../sql-user/sql-user.mapper';
 
 @Injectable()
-export class SqlBuyerAdapter implements CoreBuyerRepository {
+export class SqlBuyerRepositoryAdapter implements CoreBuyerRepositoryPort {
   private get queryBuilder(): SelectQueryBuilder<Buyer & { user: User }> {
     return this.buyerRepository
       .createQueryBuilder('buyer')
@@ -43,20 +42,20 @@ export class SqlBuyerAdapter implements CoreBuyerRepository {
     buyer.budgetMax = createBuyerDto.budgetMax;
     buyer.user = user;
 
-    return this.buyerRepository.save(buyer).then(SqlBuyerAdapter.toCore);
+    return this.buyerRepository.save(buyer).then(SqlBuyerMapper.toCore);
   }
 
   getAll(): Promise<CoreBuyer[]> {
     return this.queryBuilder
       .getMany()
-      .then((buyers) => buyers.map(SqlBuyerAdapter.toCore));
+      .then((buyers) => buyers.map(SqlBuyerMapper.toCore));
   }
 
   getByEmail(email: string): Promise<CoreBuyer> {
     return this.queryBuilder
       .where('user.email = :email', { email })
       .getOne()
-      .then(SqlBuyerAdapter.toCore);
+      .then(SqlBuyerMapper.toCore);
   }
 
   async update(
@@ -73,39 +72,16 @@ export class SqlBuyerAdapter implements CoreBuyerRepository {
 
     await this.queryBuilder
       .update()
-      .set(SqlBuyerAdapter.fromCore(data))
+      .set(SqlBuyerMapper.fromCore(data))
       .where('id = :id', { id: buyer.id })
       .execute();
 
     await this.queryBuilder
       .update(User)
-      .set(SqlUserAdapter.fromCore(data))
+      .set(SqlUserMapper.fromCore(data))
       .where('id = :id', { id: buyer.user.id })
       .execute();
 
     return this.getByEmail(email);
-  }
-
-  static fromCore({
-    budgetMax,
-    budgetMin,
-  }: Partial<CoreBuyerAttributes>): Partial<BuyerAttributes> {
-    return {
-      ...(budgetMax !== undefined && { budgetMax }),
-      ...(budgetMin !== undefined && { budgetMin }),
-    };
-  }
-
-  static toCore({
-    id,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    user: { id: _, hash, ...user },
-    ...buyer
-  }: Buyer & { user: User }): CoreBuyer {
-    return {
-      ...user,
-      ...buyer,
-      id: toCoreId(id),
-    };
   }
 }

@@ -1,15 +1,15 @@
 import { Module } from '@nestjs/common';
-import { MeetService } from './meet/meet.service';
+import { MeetAdapter } from './meet/meet.adapter';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { Meet } from '@nts/internal/meet/meet.entity';
-import { internalToken } from '@nts/internal/internal.token';
-import { Meeter } from '@nts/internal/dist/meeter';
-import { MeeterFake } from '@nts/internal/dist/meeter.fake';
+import { Meet } from './meet/meet.entity';
+import { internalToken } from './internal.token';
+import { Meeter } from './dist/meeter';
+import { MeeterFake } from './dist/meeter.fake';
 
 @Module({
   providers: [
-    MeetService,
+    MeetAdapter,
     {
       provide: Meeter,
       useValue:
@@ -42,6 +42,6 @@ import { MeeterFake } from '@nts/internal/dist/meeter.fake';
     } as TypeOrmModuleOptions),
     TypeOrmModule.forFeature([Meet], internalToken),
   ],
-  exports: [MeetService],
+  exports: [MeetAdapter],
 })
 export class InternalModule {}

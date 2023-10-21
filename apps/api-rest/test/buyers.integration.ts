@@ -4,11 +4,10 @@ import * as request from 'supertest';
 import { ApiRestModule } from '../src/api-rest.module';
 import { BuyersController } from '../src/buyers/buyers.controller';
 import { Repository } from 'typeorm';
-import { Buyer, SqlModule, User } from '@nts/infrastructure';
+import { Buyer, Meet, SqlModule, User } from '@nts/infrastructure';
 import { TrackService } from '@nts/external';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { Meet } from '@nts/internal';
-import { internalToken } from '@nts/internal/internal.token';
+import { internalToken } from '../../../infrastructure/internal/internal.token';
 
 describe('BuyersController', () => {
   let app: INestApplication;

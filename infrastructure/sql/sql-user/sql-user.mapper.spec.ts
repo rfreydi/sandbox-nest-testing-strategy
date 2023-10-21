@@ -1,13 +1,13 @@
-import { SqlUserAdapter } from './sql-user.adapter';
+import { SqlUserMapper } from './sql-user.mapper';
 
 interface SqlUserAdapterFromCore {
-  input: Parameters<typeof SqlUserAdapter.fromCore>[0];
-  output: ReturnType<typeof SqlUserAdapter.fromCore>;
+  input: Parameters<typeof SqlUserMapper.fromCore>[0];
+  output: ReturnType<typeof SqlUserMapper.fromCore>;
 }
 
 describe('Infrastructure', () => {
   describe('Sql', () => {
-    describe('SqlUserAdapter', () => {
+    describe('SqlUserMapper', () => {
       it.each([
         { input: {}, output: {} },
         ...[undefined, null, '', 'test'].flatMap((value) => [
@@ -26,7 +26,7 @@ describe('Infrastructure', () => {
         `,
         ({ input, output }: SqlUserAdapterFromCore) => {
           // Act
-          const entity = SqlUserAdapter.fromCore(input);
+          const entity = SqlUserMapper.fromCore(input);
 
           // Assert
           expect(entity).toEqual(output);

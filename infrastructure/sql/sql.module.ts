@@ -3,18 +3,24 @@ import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import {
   Buyer,
   Estate,
-  SqlBuyerAdapter,
-  SqlEstateAdapter,
-  SqlUserAdapter,
+  SqlBuyerRepositoryAdapter,
+  SqlEstateRepositoryAdapter,
+  SqlUserRepositoryAdapter,
   User,
 } from '@nts/infrastructure';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ComputedModule } from '@nts/computed';
 
-const adapters = [SqlBuyerAdapter, SqlEstateAdapter, SqlUserAdapter];
+const adapters = [
+  SqlBuyerRepositoryAdapter,
+  SqlEstateRepositoryAdapter,
+  SqlUserRepositoryAdapter,
+];
 
 @Module({
   exports: [...adapters, TypeOrmModule],
   imports: [
+    ComputedModule,
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
